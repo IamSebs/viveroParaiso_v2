@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}{% if modo == 'editar' %}Editar proveedor{% else %}Nuevo proveedor{% endif %}{% endblock %}
+{% block heading %}{% if modo == 'editar' %}Editar proveedor{% else %}Registrar proveedor{% endif %}{% endblock %}
+{% block content %}
+<article class="card form-card">
+    <form method="post" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="form-grid">
+            <label>Nombre de la empresa *
+                <input type="text" name="nombre_empresa" required maxlength="150" value="{{ proveedor.nombre_empresa if proveedor else '' }}">
+            </label>
+            <label>NIT o documento *
+                <input type="text" name="nit" required maxlength="30" value="{{ proveedor.nit if proveedor else '' }}">
+            </label>
+            <label>Persona de contacto *
+                <input type="text" name="persona_contacto" required maxlength="120" value="{{ proveedor.persona_contacto if proveedor else '' }}">
+            </label>
+            <label>Teléfono *
+                <input type="tel" name="telefono" required maxlength="20" value="{{ proveedor.telefono if proveedor else '' }}">
+            </label>
+            <label>Correo electrónico *
+                <input type="email" name="correo" required maxlength="120" value="{{ proveedor.correo if proveedor else '' }}">
+            </label>
+            <label>Estado *
+                <select name="estado" required>
+                    {% for estado in ['Activo','Inactivo'] %}
+                    <option value="{{ estado }}" {% if proveedor and proveedor.estado == estado %}selected{% endif %}>{{ estado }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label class="full">Dirección *
+                <input type="text" name="direccion" required maxlength="200" value="{{ proveedor.direccion if proveedor else '' }}">
+            </label>
+            <label class="full">Productos suministrados
+                <textarea name="productos_suministrados" rows="3" maxlength="1000">{{ proveedor.productos_suministrados if proveedor and proveedor.productos_suministrados else '' }}</textarea>
+            </label>
+        </div>
+        <div class="form-actions">
+            <a class="btn btn-ghost" href="{{ url_for('proveedores.lista') }}">Cancelar</a>
+            <button class="btn btn-primary" type="submit"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+        </div>
+    </form>
+</article>
+{% endblock %}

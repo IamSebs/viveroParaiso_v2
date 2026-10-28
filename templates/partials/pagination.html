@@ -1,0 +1,14 @@
+{% set q = request.args.get('q') %}
+{% set categoria = request.args.get('categoria') %}
+{% set bajo_stock = request.args.get('bajo_stock') %}
+{% if pages and pages > 1 %}
+<nav class="pagination" aria-label="Paginación">
+    {% if page > 1 %}
+        <a class="btn btn-ghost" href="{{ url_for(request.endpoint, page=page-1, q=q, categoria=categoria, bajo_stock=bajo_stock) }}"><i class="fa-solid fa-chevron-left"></i> Anterior</a>
+    {% endif %}
+    <span class="muted">Página {{ page }} de {{ pages }}</span>
+    {% if page < pages %}
+        <a class="btn btn-ghost" href="{{ url_for(request.endpoint, page=page+1, q=q, categoria=categoria, bajo_stock=bajo_stock) }}">Siguiente <i class="fa-solid fa-chevron-right"></i></a>
+    {% endif %}
+</nav>
+{% endif %}

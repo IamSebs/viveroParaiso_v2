@@ -1,0 +1,9 @@
+{% extends "layout_simple.html" %}
+{% block title %}Página no encontrada{% endblock %}
+{% block content %}
+<section class="login-card error-card">
+    <h1>404</h1>
+    <p>La página solicitada no existe o fue movida.</p>
+    <a class="btn btn-primary" href="{{ url_for('dashboard.index') }}">Ir al inicio</a>
+</section>
+{% endblock %}

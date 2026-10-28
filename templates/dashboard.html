@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block heading %}Panel de administración{% endblock %}
+{% block content %}
+<section class="page-intro">
+    <p>Resumen operativo de <strong>{{ vivero_nombre }}</strong>.</p>
+</section>
+<div class="stat-grid">
+    <a class="stat-card" href="{{ url_for('productos.lista') }}">
+        <i class="fa-solid fa-seedling"></i>
+        <div>
+            <span>Productos</span>
+            <strong>{{ datos.productos }}</strong>
+        </div>
+    </a>
+    <a class="stat-card" href="{{ url_for('clientes.lista') }}">
+        <i class="fa-solid fa-users"></i>
+        <div>
+            <span>Clientes</span>
+            <strong>{{ datos.clientes }}</strong>
+        </div>
+    </a>
+    <a class="stat-card" href="{% if usuario_actual.rol == 'admin' %}{{ url_for('empleados.lista') }}{% else %}#{% endif %}">
+        <i class="fa-solid fa-id-badge"></i>
+        <div>
+            <span>Empleados</span>
+            <strong>{{ datos.empleados }}</strong>
+        </div>
+    </a>
+    <a class="stat-card" href="{{ url_for('proveedores.lista') }}">
+        <i class="fa-solid fa-truck-field"></i>
+        <div>
+            <span>Proveedores</span>
+            <strong>{{ datos.proveedores }}</strong>
+        </div>
+    </a>
+</div>
+
+<div class="quick-actions">
+    <a class="btn btn-primary" href="{{ url_for('productos.crear') }}"><i class="fa-solid fa-plus"></i> Nuevo producto</a>
+    <a class="btn btn-secondary" href="{{ url_for('clientes.crear') }}"><i class="fa-solid fa-user-plus"></i> Nuevo cliente</a>
+    <a class="btn btn-secondary" href="{{ url_for('proveedores.crear') }}"><i class="fa-solid fa-plus"></i> Nuevo proveedor</a>
+    {% if usuario_actual.rol == 'admin' %}
+    <a class="btn btn-secondary" href="{{ url_for('empleados.crear') }}"><i class="fa-solid fa-id-card"></i> Nuevo empleado</a>
+    {% endif %}
+</div>
+
+<div class="split">
+    <article class="card">
+        <header class="card-head">
+            <h2><i class="fa-solid fa-clock"></i> Productos recientes</h2>
+            <a href="{{ url_for('productos.lista') }}">Ver todos</a>
+        </header>
+        {% if datos.recientes %}
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Stock</th>
+                        <th>Precio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in datos.recientes %}
+                    <tr>
+                        <td><a href="{{ url_for('productos.detalle', producto_id=item.id) }}">{{ item.nombre }}</a></td>
+                        <td>{{ item.categoria }}</td>
+                        <td>{{ item.cantidad_disponible }}</td>
+                        <td>${{ '%.0f'|format(item.precio_venta) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="empty">Aún no hay productos registrados.</p>
+        {% endif %}
+    </article>
+    <article class="card">
+        <header class="card-head">
+            <h2><i class="fa-solid fa-triangle-exclamation"></i> Existencias bajas</h2>
+            <a href="{{ url_for('productos.lista', bajo_stock=1) }}">Filtrar</a>
+        </header>
+        {% if datos.stock_bajo %}
+        <ul class="alert-list">
+            {% for item in datos.stock_bajo %}
+            <li>
+                <div>
+                    <strong>{{ item.nombre }}</strong>
+                    <small>{{ item.categoria }}</small>
+                </div>
+                <span class="badge badge-warn">{{ item.cantidad_disponible }} / mín. {{ item.stock_minimo }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="empty">No hay alertas de inventario.</p>
+        {% endif %}
+    </article>
+</div>
+{% endblock %}

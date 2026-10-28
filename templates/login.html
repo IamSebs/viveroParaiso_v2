@@ -1,0 +1,24 @@
+{% extends "layout_simple.html" %}
+{% block title %}Iniciar sesión | {{ vivero_nombre }}{% endblock %}
+{% block content %}
+<section class="login-card">
+    <div class="login-hero">
+        <img src="{{ url_for('static', filename='img/logo.svg') }}" alt="Logo" width="72" height="72">
+        <h1>Vivero El Paraíso de las Plantas</h1>
+        <p>Sistema de información para el control de inventario, clientes, empleados y proveedores.</p>
+    </div>
+    <form method="post" class="login-form" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <h2>Iniciar sesión</h2>
+        <label>
+            Usuario o correo electrónico
+            <input type="text" name="identificador" required maxlength="120" autocomplete="username">
+        </label>
+        <label>
+            Contraseña
+            <input type="password" name="password" required minlength="8" autocomplete="current-password">
+        </label>
+        <button type="submit" class="btn btn-primary full"><i class="fa-solid fa-right-to-bracket"></i> Entrar</button>
+    </form>
+</section>
+{% endblock %}

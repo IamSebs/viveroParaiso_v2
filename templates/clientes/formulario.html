@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}{% if modo == 'editar' %}Editar cliente{% else %}Nuevo cliente{% endif %}{% endblock %}
+{% block heading %}{% if modo == 'editar' %}Editar cliente{% else %}Registrar cliente{% endif %}{% endblock %}
+{% block content %}
+<article class="card form-card">
+    <form method="post" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="form-grid">
+            <label>Nombres *
+                <input type="text" name="nombres" required maxlength="80" value="{{ cliente.nombres if cliente else '' }}">
+            </label>
+            <label>Apellidos *
+                <input type="text" name="apellidos" required maxlength="80" value="{{ cliente.apellidos if cliente else '' }}">
+            </label>
+            <label>Tipo de documento *
+                <select name="tipo_documento" required>
+                    <option value="">Seleccione</option>
+                    {% for tipo in ['CC','CE','NIT','Pasaporte','TI'] %}
+                    <option value="{{ tipo }}" {% if cliente and cliente.tipo_documento == tipo %}selected{% endif %}>{{ tipo }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>Número de documento *
+                <input type="text" name="numero_documento" required maxlength="30" value="{{ cliente.numero_documento if cliente else '' }}">
+            </label>
+            <label>Teléfono *
+                <input type="tel" name="telefono" required maxlength="20" value="{{ cliente.telefono if cliente else '' }}">
+            </label>
+            <label>Correo electrónico *
+                <input type="email" name="correo" required maxlength="120" value="{{ cliente.correo if cliente else '' }}">
+            </label>
+            <label class="full">Dirección *
+                <input type="text" name="direccion" required maxlength="200" value="{{ cliente.direccion if cliente else '' }}">
+            </label>
+        </div>
+        <div class="form-actions">
+            <a class="btn btn-ghost" href="{{ url_for('clientes.lista') }}">Cancelar</a>
+            <button class="btn btn-primary" type="submit"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+        </div>
+    </form>
+</article>
+{% endblock %}

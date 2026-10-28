@@ -1,0 +1,9 @@
+{% extends "layout_simple.html" %}
+{% block title %}Error del servidor{% endblock %}
+{% block content %}
+<section class="login-card error-card">
+    <h1>500</h1>
+    <p>Ocurrió un error interno. Intente de nuevo más tarde. Si el problema continúa, verifique la conexión a MySQL y la configuración del archivo .env.</p>
+    <a class="btn btn-primary" href="{{ url_for('auth.login') }}">Volver al inicio de sesión</a>
+</section>
+{% endblock %}

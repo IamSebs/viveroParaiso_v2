@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Productos{% endblock %}
+{% block heading %}Productos{% endblock %}
+{% block content %}
+<div class="toolbar">
+    <form method="get" class="search-form">
+        <input type="search" name="q" value="{{ q or '' }}" placeholder="Buscar por nombre o categoría">
+        <select name="categoria">
+            <option value="">Todas las categorías</option>
+            {% for cat in categorias %}
+            <option value="{{ cat }}" {% if categoria == cat %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+        <label class="check">
+            <input type="checkbox" name="bajo_stock" value="1" {% if bajo_stock %}checked{% endif %}>
+            Stock bajo
+        </label>
+        <button class="btn btn-secondary" type="submit"><i class="fa-solid fa-magnifying-glass"></i> Buscar</button>
+    </form>
+    <a class="btn btn-primary" href="{{ url_for('productos.crear') }}"><i class="fa-solid fa-plus"></i> Registrar producto</a>
+</div>
+<article class="card">
+    <p class="muted">{{ total }} producto(s) encontrados.</p>
+    {% if productos %}
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Stock</th>
+                    <th>P. venta</th>
+                    <th>Proveedor</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in productos %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>
+                        <a href="{{ url_for('productos.detalle', producto_id=item.id) }}">{{ item.nombre }}</a>
+                        {% if item.cantidad_disponible <= item.stock_minimo %}
+                        <span class="badge badge-warn">Bajo</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ item.categoria }}</td>
+                    <td>{{ item.cantidad_disponible }}</td>
+                    <td>${{ '%.0f'|format(item.precio_venta) }}</td>
+                    <td>{{ item.proveedor_nombre }}</td>
+                    <td class="actions">
+                        <a class="icon-btn" href="{{ url_for('productos.editar', producto_id=item.id) }}" title="Editar"><i class="fa-solid fa-pen"></i></a>
+                        <form method="post" action="{{ url_for('productos.eliminar', producto_id=item.id) }}" class="inline js-confirm-delete" data-message="¿Eliminar el producto {{ item.nombre }}?">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button class="icon-btn danger" type="submit" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include "partials/pagination.html" %}
+    {% else %}
+    <p class="empty">No hay productos para mostrar.</p>
+    {% endif %}
+</article>
+{% endblock %}

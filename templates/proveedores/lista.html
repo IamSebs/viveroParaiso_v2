@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Proveedores{% endblock %}
+{% block heading %}Proveedores{% endblock %}
+{% block content %}
+<div class="toolbar">
+    <form method="get" class="search-form">
+        <input type="search" name="q" value="{{ q or '' }}" placeholder="Buscar por nombre, NIT o contacto">
+        <button class="btn btn-secondary" type="submit"><i class="fa-solid fa-magnifying-glass"></i> Buscar</button>
+    </form>
+    <a class="btn btn-primary" href="{{ url_for('proveedores.crear') }}"><i class="fa-solid fa-plus"></i> Registrar proveedor</a>
+</div>
+<article class="card">
+    <p class="muted">{{ total }} proveedor(es) encontrados.</p>
+    {% if proveedores %}
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Empresa</th>
+                    <th>NIT</th>
+                    <th>Contacto</th>
+                    <th>Teléfono</th>
+                    <th>Estado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in proveedores %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td><a href="{{ url_for('proveedores.detalle', proveedor_id=item.id) }}">{{ item.nombre_empresa }}</a></td>
+                    <td>{{ item.nit }}</td>
+                    <td>{{ item.persona_contacto }}</td>
+                    <td>{{ item.telefono }}</td>
+                    <td><span class="badge {% if item.estado == 'Activo' %}badge-ok{% else %}badge-warn{% endif %}">{{ item.estado }}</span></td>
+                    <td class="actions">
+                        <a class="icon-btn" href="{{ url_for('proveedores.editar', proveedor_id=item.id) }}" title="Editar"><i class="fa-solid fa-pen"></i></a>
+                        <form method="post" action="{{ url_for('proveedores.eliminar', proveedor_id=item.id) }}" class="inline js-confirm-delete" data-message="¿Eliminar al proveedor {{ item.nombre_empresa }}? Si tiene productos asociados, la operación será rechazada.">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button class="icon-btn danger" type="submit" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include "partials/pagination.html" %}
+    {% else %}
+    <p class="empty">No hay proveedores para mostrar.</p>
+    {% endif %}
+</article>
+{% endblock %}

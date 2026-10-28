@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Hoja del vivero">
+  <rect width="64" height="64" rx="16" fill="#1B4332"/>
+  <path d="M18 42c12-2 20-12 22-24 8 14 4 28-10 32-8 2-14-2-12-8z" fill="#95D5B2"/>
+  <path d="M22 40c8-1 14-8 16-18" fill="none" stroke="#1B4332" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="44" cy="18" r="4" fill="#D8F3DC"/>
+</svg>

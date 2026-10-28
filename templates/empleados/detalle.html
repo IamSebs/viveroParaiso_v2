@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ empleado.nombres }} {{ empleado.apellidos }}{% endblock %}
+{% block heading %}Detalle del empleado{% endblock %}
+{% block content %}
+<article class="card">
+    <header class="card-head">
+        <h2>{{ empleado.nombres }} {{ empleado.apellidos }}</h2>
+        <div class="actions">
+            <a class="btn btn-secondary" href="{{ url_for('empleados.editar', empleado_id=empleado.id) }}"><i class="fa-solid fa-pen"></i> Editar</a>
+            <form method="post" action="{{ url_for('empleados.eliminar', empleado_id=empleado.id) }}" class="inline js-confirm-delete" data-message="¿Eliminar este empleado?">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button class="btn btn-danger" type="submit"><i class="fa-solid fa-trash"></i> Eliminar</button>
+            </form>
+        </div>
+    </header>
+    <dl class="details">
+        <div><dt>ID</dt><dd>{{ empleado.id }}</dd></div>
+        <div><dt>Documento</dt><dd>{{ empleado.tipo_documento }} {{ empleado.numero_documento }}</dd></div>
+        <div><dt>Cargo</dt><dd>{{ empleado.cargo }}</dd></div>
+        <div><dt>Estado</dt><dd>{{ empleado.estado_laboral }}</dd></div>
+        <div><dt>Teléfono</dt><dd>{{ empleado.telefono }}</dd></div>
+        <div><dt>Correo</dt><dd>{{ empleado.correo }}</dd></div>
+        <div><dt>Fecha de contratación</dt><dd>{{ empleado.fecha_contratacion }}</dd></div>
+        <div><dt>Fecha de registro</dt><dd>{{ empleado.fecha_registro }}</dd></div>
+    </dl>
+    <a class="btn btn-ghost" href="{{ url_for('empleados.lista') }}"><i class="fa-solid fa-arrow-left"></i> Volver</a>
+</article>
+{% endblock %}

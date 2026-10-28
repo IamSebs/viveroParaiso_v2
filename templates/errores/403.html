@@ -1,0 +1,9 @@
+{% extends "layout_simple.html" %}
+{% block title %}Acceso denegado{% endblock %}
+{% block content %}
+<section class="login-card error-card">
+    <h1>403</h1>
+    <p>{{ mensaje or "No tiene permiso para acceder a este recurso. El módulo de empleados está reservado a administradores." }}</p>
+    <a class="btn btn-primary" href="{{ url_for('dashboard.index') }}">Volver al panel</a>
+</section>
+{% endblock %}

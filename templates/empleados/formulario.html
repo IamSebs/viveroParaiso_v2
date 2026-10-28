@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}{% if modo == 'editar' %}Editar empleado{% else %}Nuevo empleado{% endif %}{% endblock %}
+{% block heading %}{% if modo == 'editar' %}Editar empleado{% else %}Registrar empleado{% endif %}{% endblock %}
+{% block content %}
+<article class="card form-card">
+    <form method="post" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="form-grid">
+            <label>Nombres *
+                <input type="text" name="nombres" required maxlength="80" value="{{ empleado.nombres if empleado else '' }}">
+            </label>
+            <label>Apellidos *
+                <input type="text" name="apellidos" required maxlength="80" value="{{ empleado.apellidos if empleado else '' }}">
+            </label>
+            <label>Tipo de documento *
+                <select name="tipo_documento" required>
+                    <option value="">Seleccione</option>
+                    {% for tipo in ['CC','CE','NIT','Pasaporte','TI'] %}
+                    <option value="{{ tipo }}" {% if empleado and empleado.tipo_documento == tipo %}selected{% endif %}>{{ tipo }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>Número de documento *
+                <input type="text" name="numero_documento" required maxlength="30" value="{{ empleado.numero_documento if empleado else '' }}">
+            </label>
+            <label>Cargo *
+                <select name="cargo" required>
+                    <option value="">Seleccione</option>
+                    {% for cargo in ['Administrador','Vendedor','Jardinero','Auxiliar de vivero','Contador','Bodeguero'] %}
+                    <option value="{{ cargo }}" {% if empleado and empleado.cargo == cargo %}selected{% endif %}>{{ cargo }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>Teléfono *
+                <input type="tel" name="telefono" required maxlength="20" value="{{ empleado.telefono if empleado else '' }}">
+            </label>
+            <label>Correo electrónico *
+                <input type="email" name="correo" required maxlength="120" value="{{ empleado.correo if empleado else '' }}">
+            </label>
+            <label>Fecha de contratación *
+                <input type="date" name="fecha_contratacion" required value="{% if empleado and empleado.fecha_contratacion %}{{ empleado.fecha_contratacion.strftime('%Y-%m-%d') if empleado.fecha_contratacion.strftime is defined else empleado.fecha_contratacion }}{% endif %}">
+            </label>
+            <label>Estado laboral *
+                <select name="estado_laboral" required>
+                    {% for estado in ['Activo','Inactivo','Vacaciones'] %}
+                    <option value="{{ estado }}" {% if empleado and empleado.estado_laboral == estado %}selected{% endif %}>{{ estado }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+        </div>
+        <div class="form-actions">
+            <a class="btn btn-ghost" href="{{ url_for('empleados.lista') }}">Cancelar</a>
+            <button class="btn btn-primary" type="submit"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+        </div>
+    </form>
+</article>
+{% endblock %}
