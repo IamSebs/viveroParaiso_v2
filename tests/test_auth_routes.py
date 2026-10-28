@@ -35,3 +35,16 @@ def test_empleados_requiere_autenticacion():
     client = app.test_client()
     response = client.get("/empleados/", follow_redirects=False)
     assert response.status_code == 302
+
+
+def test_login_temporal_admin():
+    app = create_app()
+    app.config["WTF_CSRF_ENABLED"] = False
+    client = app.test_client()
+    response = client.post(
+        "/login",
+        data={"identificador": "admin", "password": "admin123"},
+        follow_redirects=False,
+    )
+    assert response.status_code == 302
+    assert response.headers["Location"] == "/"
